@@ -42,10 +42,10 @@ app.get('/userRealData', (req, res) => {
 app.post('/userRealData', (req, res) => {
     let tempUserData = rsa_key.encrypt(req.body, 'base64');
     res.cookie(`ses`, tempUserData, {
-        expires: new Date(Date.now() + (1000 * 60 * 60 * 24 * 30)),
+        expires: new Date(Date.now() + (1000 * 60 * 60 * 24 * 30))/*,
         secure: true,
         httpOnly: true,
-        sameSite: 'none'
+        sameSite: 'none'*/
     })
     res.status(200).json("Done")
 })
@@ -106,10 +106,10 @@ app.post('/getValOTP', (req, res) => {
         req.session.tempUserData.pp = null;
         let tempUserData = rsa_key.encrypt(req.session.tempUserData, 'base64');
         res.cookie(`ses`, tempUserData, {
-            expires: new Date(Date.now() + (1000 * 60 * 60 * 24 * 30)),
+            expires: new Date(Date.now() + (1000 * 60 * 60 * 24 * 30))/*,
             secure: true,
             httpOnly: true,
-            sameSite: 'none'
+            sameSite: 'none'*/
         })
         req.session.destroy();
         res.status(201).json({
