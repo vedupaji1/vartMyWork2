@@ -122,7 +122,7 @@ app.post('/getValOTP', (req, res) => {
     }
 })
 
-app.get('/user', (req, res) => {
+app.get('/userLog', (req, res) => {
     res.clearCookie('ses')
     res.status(201).json({
         mess: "Done"
