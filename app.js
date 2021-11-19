@@ -133,6 +133,7 @@ app.get('/user', (req, res) => {
     })
 })
 
+
 app.use(express.static(path.join(__dirname, "client/build")));
 
 app.get("/*", function (_, res) {
