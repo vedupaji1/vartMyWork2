@@ -1,0 +1,24 @@
+{
+  "name": "VARtMyWork",
+  "version": "1.0.0",
+  "description": "This Is One Type Of Todo App Who Provides You Lots Of Features",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false && npm install --prefix client && npm run build --prefix client"
+  },
+  "author": "Vedupaji",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.5",
+    "express": "^4.17.1",
+    "express-session": "^1.17.2",
+    "http": "0.0.1-security",
+    "node-rsa": "^1.1.1",
+    "nodemailer": "^6.7.0",
+    "nodemon": "^2.0.15",
+    "socket.io": "^4.3.1"
+  }
+}
