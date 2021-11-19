@@ -13,7 +13,7 @@ const User = (props) => {
         return data;
     }
     const logoutFromTodo = () => {
-        fetch('/user', {
+        fetch('/userLog', {
             method: 'GET',
             headers: {
                 Accept: "application/json",
