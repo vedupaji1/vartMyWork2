@@ -28,10 +28,6 @@ app.use(session({
     resave: false
 }))
 
-app.get('/', (req, res) => {
-    res.send("Op")
-})
-
 app.get('/userRealData', (req, res) => {
     let sesData = req.cookies.ses;
     if (sesData === undefined) {
