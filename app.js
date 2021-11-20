@@ -34,8 +34,16 @@ app.get('/userRealData', (req, res) => {
         res.send({
             isNull: true
         });
-    } else {
-        res.send(rsa_key.decrypt(sesData, 'utf8'));
+    } else {   
+            try {
+             res.send(rsa_key.decrypt(sesData, 'utf8'));
+            }
+            catch(err) {
+               res.send({
+                 isNull: true,
+                 tempData: sesData
+               });
+            }
     }
 })
 
