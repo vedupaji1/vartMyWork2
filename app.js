@@ -41,7 +41,8 @@ app.get('/userRealData', (req, res) => {
             catch(err) {
                res.send({
                  isNull: true,
-                 tempData: sesData
+                 tempData: sesData,
+                   errData:err
                });
             }
     }
