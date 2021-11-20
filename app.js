@@ -36,7 +36,8 @@ app.get('/userRealData', (req, res) => {
         });
     } else {   
             try {
-             res.send(rsa_key.decrypt(sesData, 'utf8'));
+            // res.send(rsa_key.decrypt(sesData, 'utf8'));
+                res.send(sesData);
             }
             catch(err) {
                res.send({
@@ -49,7 +50,8 @@ app.get('/userRealData', (req, res) => {
 })
 
 app.post('/userRealData', (req, res) => {
-    let tempUserData = rsa_key.encrypt(req.body, 'base64');
+    //let tempUserData = rsa_key.encrypt(req.body, 'base64');
+    let tempUserData = req.body;
     res.cookie(`ses`, tempUserData, {
         expires: new Date(Date.now() + (1000 * 60 * 60 * 24 * 30))/*,
         secure: true,
@@ -113,7 +115,8 @@ app.post('/getMailData', (req, res) => {
 app.post('/getValOTP', (req, res) => {
     if (req.session.tempUserData.pp == req.body.otp) {
         req.session.tempUserData.pp = null;
-        let tempUserData = rsa_key.encrypt(req.session.tempUserData, 'base64');
+        //let tempUserData = rsa_key.encrypt(req.session.tempUserData, 'base64');
+        let tempUserData = req.session.tempUserData;
         res.cookie(`ses`, tempUserData, {
             expires: new Date(Date.now() + (1000 * 60 * 60 * 24 * 30))/*,
             secure: true,
