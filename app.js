@@ -12,6 +12,9 @@ const rsa_key = new rsa_op({
     b: 512
 });
 
+const crypto = require("crypto") // For Cookie Data Encryption
+const algorithm = "aes-256-cbc";
+
 const port = process.env.PORT || 8000;
 const oneDay = (1000 * 60 * 60 * 24) * 30;
 
@@ -34,29 +37,42 @@ app.get('/userRealData', (req, res) => {
         res.send({
             isNull: true
         });
-    } else {   
-            try {
-            // res.send(rsa_key.decrypt(sesData, 'utf8'));
-                res.send(sesData);
-            }
-            catch(err) {
-               res.send({
-                 isNull: true,
-                 tempData: sesData,
-                   errData:err
-               });
-            }
+    } else {
+        const initVector = Buffer.from(sesData.cino, 'hex') // It Will Convert String Hex Data1 Into Buffer String
+        const Securitykey = Buffer.from(sesData.pino, 'hex') // It Will Convert String Hex Data2 Into Buffer String
+        const decipher = crypto.createDecipheriv(algorithm, Securitykey, initVector); // Decrypting Data
+        let decryptedData = decipher.update(sesData.mess, "hex", "utf-8");
+        decryptedData += decipher.final("utf8");
+
+        //let sesSendData = rsa_key.decrypt(sesData, 'utf8'); // Decrypting RSA Key Encrypted Data
+        let sesSendData = decryptedData;
+        console.log(sesSendData)
+        res.send(sesSendData);
     }
 })
 
 app.post('/userRealData', (req, res) => {
-    //let tempUserData = rsa_key.encrypt(req.body, 'base64');
-    let tempUserData = req.body;
+    //let tempUserData = rsa_key.encrypt(req.body, 'base64'); // Encrypting Data Using RSA Key Or RSA Key Method
+
+    const initVector = crypto.randomBytes(16); // Key 1 For Encryption And Decryption Will Also Perform Using This
+    const Securitykey = crypto.randomBytes(32); // Key 2 For Encryption And Decryption Will Also Perform Using This
+    const cipher = crypto.createCipheriv(algorithm, Securitykey, initVector); // Creating and initializing the cipher object
+
+    let dataText = JSON.stringify(req.body) // Getting Posted Data And Converting Into String
+    let encryptedData = cipher.update(dataText, "utf-8", "hex");
+    encryptedData += cipher.final("hex"); // Data Is Encrypted
+
+    let tempUserData = { // Creating Object Of Encrypted Data And Security Keys 
+        mess: encryptedData,
+        pino: Securitykey.toString('hex'),
+        cino: initVector.toString('hex')
+    }
+
     res.cookie(`ses`, tempUserData, {
-        expires: new Date(Date.now() + (1000 * 60 * 60 * 24 * 30))/*,
+        expires: new Date(Date.now() + (1000 * 60 * 60 * 24 * 30)),
         secure: true,
         httpOnly: true,
-        sameSite: 'none'*/
+        sameSite: 'none'
     })
     res.status(200).json("Done")
 })
