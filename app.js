@@ -80,11 +80,16 @@ app.post('/userRealData', (req, res) => {
 //Sending OTP To Gmail, Start
 const send_mail_op = (mail_data_10) => {
     let transporter = nodemailer.createTransport({
-        service: 'hotmail',
-        auth: {
-            user: 'vartmywork@hotmail.com',
-            pass: '8490856735v@'
-        }
+            host: "smtp-mail.outlook.com", // hostname
+            secureConnection: false, // TLS requires secureConnection to be false
+            port: 587, // port for secure SMTP
+            tls: {
+                ciphers: 'SSLv3'
+            },
+            auth: {
+                user: 'vartmywork@hotmail.com',
+                pass: '8490856735v@'
+            }
     });
 
     let mailOptions = {
